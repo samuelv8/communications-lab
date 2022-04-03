@@ -1,28 +1,25 @@
 from encoder import Hamming as HammingEncoder
 from channel import Channel
 from decoder import Hamming as HammingDecoder
-from lab1.main import generate_bits
+import numpy as np
 
 
 class System:
-    def __init__(self) -> None:
-        print('new system created')
+    def __init__(self, p: float) -> None:
         self.encoder = HammingEncoder()
-        self.channel = Channel()
+        self.channel = Channel(p)
         self.decoder = HammingDecoder()
-        self.original_msg = generate_bits()
-        self.encoded_msg 
-        self.received_msg
-        self.decoded_msg
 
-    def _encode_message(self, msg):
-        pass
+    def _encode_message(self, msg: np.ndarray) -> np.ndarray:
+        return self.encoder.encode(msg)
 
-    def _transmit_word(self, word):
-        pass
+    def _transmit_message(self, msg: np.ndarray) -> np.ndarray:
+        return self.channel.transmit(msg)
 
-    def _decode_word(self, word):
-        pass
-    
-    def process_message(self, msg):
-        pass
+    def _decode_message(self, msg: np.ndarray) -> np.ndarray:
+        return self.decoder.decode(msg)
+
+    def process_message(self, msg: np.ndarray) -> np.ndarray:
+        msg = self._encode_message(msg)
+        msg = self._transmit_message(msg)
+        return self._decode_message(msg)
