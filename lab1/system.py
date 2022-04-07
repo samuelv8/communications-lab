@@ -5,7 +5,7 @@ import numpy as np
 
 
 class System:
-    def __init__(self, p: float) -> None:
+    def __init__(self, p: float = 0.0) -> None:
         self.encoder = HammingEncoder()
         self.channel = Channel(p)
         self.decoder = HammingDecoder()
@@ -20,6 +20,7 @@ class System:
         return self.decoder.decode(msg)
 
     def process_message(self, msg: np.ndarray) -> np.ndarray:
-        msg = self._encode_message(msg)
-        msg = self._transmit_message(msg)
-        return self._decode_message(msg)
+        encoded_msg = self._encode_message(msg)
+        transmitted_msg = self._transmit_message(encoded_msg)
+        decoded_msg = self._decode_message(transmitted_msg)
+        return decoded_msg

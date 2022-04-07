@@ -7,7 +7,7 @@ class Encoder(ABC):
         super().__init__()
 
     def encode(self):
-        raise NotImplementedError("Método abstrato")
+        raise NotImplementedError('Abstract method!')
 
 
 class Hamming(Encoder):

@@ -1,5 +1,4 @@
 from abc import ABC
-
 import numpy as np
 
 
@@ -8,7 +7,7 @@ class Decoder(ABC):
         super().__init__()
 
     def decode(self):
-        raise NotImplementedError("Método abstrato")
+        raise NotImplementedError('Abstract method!')
 
 
 class Hamming(Decoder):
@@ -26,16 +25,11 @@ class Hamming(Decoder):
 
     def decode(self, msg: np.ndarray) -> np.ndarray:
         N: int = msg.shape[0]
-
         s: np.ndarray = np.matmul(msg, self.HT) % 2
-
-        e = np.zeros((N, 4))
-
+        e = np.zeros((N, 7))
         e[:, 0] = s[:, 0] * s[:, 1] * s[:, 2]  # b1 = s1.s2.s3
         e[:, 1] = s[:, 0] * s[:, 2] * (s[:, 1] + np.ones(N) % 2)  # b2 = s1.!s2.s3
         e[:, 2] = s[:, 0] * s[:, 1] * (s[:, 2] + np.ones(N) % 2)  # b3 = s1.s2.!s3
         e[:, 3] = s[:, 1] * s[:, 2] * (s[:, 0] + np.ones(N) % 2)  # b4 = !s1.s2.s3
 
-        msg = msg[:, :4]
-
-        return (msg + e) % 2
+        return (msg[:, :4] + e) % 2
