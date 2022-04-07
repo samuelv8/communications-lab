@@ -17,24 +17,48 @@ def calculate_bit_error_probability(original_msg: np.ndarray,
 
 if __name__ == "__main__":
     start = tm.default_timer()
+    types = ['hamming', 'custom']
+    msg_lengths = {'hamming': 4, 'custom': 6}
     # fmt: off
     p_list = [
         0.000002, 0.000005, 0.00001, 0.00002, 0.00005, 0.0001, 0.0002, 0.0005,
         0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5
     ]
     # fmt: on
-    bit_errors = []
+    bit_errors = {'raw': p_list}
+    for type in types:
+        bit_errors[type] = []
 
+    # for p_value in p_list:
+    #     original_msg_hamming = generate_bits()
+    #     original_msg_custom = generate_bits(message_length=6)
+    #     system_hamming = System(p_value)
+    #     system_custom = System(p_value, type='custom')
+    #     final_msg_hamming = system_hamming.process_message(original_msg_hamming)
+    #     final_msg_custom = system_custom.process_message(original_msg_custom)
+    #     bit_error_hamming = calculate_bit_error_probability(original_msg_hamming, final_msg_hamming)
+    #     bit_error_custom = calculate_bit_error_probability(original_msg_custom, final_msg_custom)
+    #     bit_errors_hamming.append(bit_error_hamming)
+    #     bit_errors_custom.append(bit_error_custom)
+    
     for p_value in p_list:
-        original_msg = generate_bits()
-        system = System(p_value)
-        final_msg = system.process_message(original_msg)
-        bit_error = calculate_bit_error_probability(original_msg, final_msg)
-        bit_errors.append(bit_error)
+        for type in types:
+            original_msg = generate_bits(message_length=msg_lengths[type])
+            system = System(p_value, type=type)
+            final_msg = system.process_message(original_msg)
+            bit_error = calculate_bit_error_probability(original_msg, final_msg)
+            bit_errors[type].append(bit_error)
+    
+    # for p_value in p_list:
+    #     original_msg = generate_bits(message_length=6)
+    #     system = System(p_value, type='custom')
+    #     final_msg = system.process_message(original_msg)
+    #     bit_error = calculate_bit_error_probability(original_msg, final_msg)
+    #     bit_errors_custom.append(bit_error)
 
     stop = tm.default_timer()
     print('Execution time: ', stop - start)
 
-    df = pd.DataFrame.from_dict({"p": p_list, "bit_error": bit_errors})
+    df = pd.DataFrame.from_dict(bit_errors)
     df.to_csv("lab1/results.csv")
     plot_graph(show_fig=False)
