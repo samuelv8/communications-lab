@@ -25,21 +25,9 @@ if __name__ == "__main__":
         0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5
     ]
     # fmt: on
-    bit_errors = {'raw': p_list}
+    bit_errors = {'none': p_list}
     for type in types:
         bit_errors[type] = []
-
-    # for p_value in p_list:
-    #     original_msg_hamming = generate_bits()
-    #     original_msg_custom = generate_bits(message_length=6)
-    #     system_hamming = System(p_value)
-    #     system_custom = System(p_value, type='custom')
-    #     final_msg_hamming = system_hamming.process_message(original_msg_hamming)
-    #     final_msg_custom = system_custom.process_message(original_msg_custom)
-    #     bit_error_hamming = calculate_bit_error_probability(original_msg_hamming, final_msg_hamming)
-    #     bit_error_custom = calculate_bit_error_probability(original_msg_custom, final_msg_custom)
-    #     bit_errors_hamming.append(bit_error_hamming)
-    #     bit_errors_custom.append(bit_error_custom)
     
     for p_value in p_list:
         for type in types:
@@ -48,13 +36,6 @@ if __name__ == "__main__":
             final_msg = system.process_message(original_msg)
             bit_error = calculate_bit_error_probability(original_msg, final_msg)
             bit_errors[type].append(bit_error)
-    
-    # for p_value in p_list:
-    #     original_msg = generate_bits(message_length=6)
-    #     system = System(p_value, type='custom')
-    #     final_msg = system.process_message(original_msg)
-    #     bit_error = calculate_bit_error_probability(original_msg, final_msg)
-    #     bit_errors_custom.append(bit_error)
 
     stop = tm.default_timer()
     print('Execution time: ', stop - start)
