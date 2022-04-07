@@ -18,7 +18,7 @@ def calculate_bit_error_probability(original_msg: np.ndarray,
 if __name__ == "__main__":
     start = tm.default_timer()
     types = ['hamming', 'custom']
-    msg_lengths = {'hamming': 4, 'custom': 6}
+    msg_data = {'hamming': (250_000,4), 'custom': (166_667,6)}
     # fmt: off
     p_list = [
         0.000002, 0.000005, 0.00001, 0.00002, 0.00005, 0.0001, 0.0002, 0.0005,
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     
     for p_value in p_list:
         for type in types:
-            original_msg = generate_bits(message_length=msg_lengths[type])
+            original_msg = generate_bits(n_messages=msg_data[type][0], message_length=msg_data[type][1])
             system = System(p_value, type=type)
             final_msg = system.process_message(original_msg)
             bit_error = calculate_bit_error_probability(original_msg, final_msg)
