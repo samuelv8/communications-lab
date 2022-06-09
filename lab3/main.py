@@ -108,9 +108,6 @@ def main(p):
         err += get_hamming_weight(msg)
 
     prob = err / (445 * 15)
-
-    print('Error probability: ', prob)
-
     stop = tm.default_timer()
     print('Execution time: ', stop - start)
     return prob
@@ -127,7 +124,7 @@ for p in p_list:
 
 df = pd.DataFrame.from_dict({ 
     'none': p_list, 
-    'm = 3': m3err,
+    'm3': m3err,
     # 'm = 4': m4err,
     # 'm = 6': m6err,
 })

@@ -7,13 +7,13 @@ def plot_graph(save_fig=True, show_fig=True, fig_format='eps'):
     _, ax = plt.subplots()
     ax.set_xscale("log")
     ax.set_yscale("log")
-    ax.plot(df["none"], df["m = 3"])
+    ax.plot(df["none"], df["m3"])
     ax.plot([0, 0.5], [0, 0.5])
     plt.gca().invert_xaxis()
     ax.set_xlabel("Probabilidade de inversao do canal")
     ax.set_ylabel("Probabilidade de erro do sistema")
     ax.set_title("Grafico de probabilidade de erro")
-    ax.legend(['m =3','None'])
+    ax.legend(['m = 3','None'])
     
     if show_fig:
         plt.show()
