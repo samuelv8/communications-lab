@@ -2,6 +2,7 @@ from channel import Channel
 from ploting import plot_graph
 import timeit as tm
 import pandas as pd
+import numpy as np
 import math
 
 p_list = [
@@ -86,8 +87,7 @@ def get_hamming_weight(msg):
     return w
 
 
-def main(p):
-    print("p :", p)
+def get_error_probability(p):
     start = tm.default_timer()
 
     bsc = Channel(p)
@@ -97,7 +97,7 @@ def main(p):
         preds = [{}] * 16
         for state in states:
             dmins[0][state] = math.inf
-        dmins[0]['000'] = 0
+        dmins[0]['0' * m] = 0
 
         for j in range(15):
             received = ''.join(str(x)
@@ -109,8 +109,18 @@ def main(p):
 
     prob = err / (445 * 15)
     stop = tm.default_timer()
-    print('Execution time: ', stop - start)
-    return prob
+
+    return prob, stop - start
+
+def main():
+    for p in p_list:
+        pe, dt = get_error_probability(p)
+        error_probs[m].append(pe)
+        exec_times[m].append(dt)
+    print(f'Mean execution time (m = {m}): ', np.mean(exec_times[m]))
+
+error_probs = {'none': p_list, 3: [], 4: [], 6: []}
+exec_times = {3: [], 4: [], 6: []}
 
 m = 3
 states = generate_binary_strings(m)
@@ -118,15 +128,24 @@ g1 = '1011'
 g2 = '1101'
 g3 = '1111'
 
-m3err = []
-for p in p_list:
-    m3err.append(main(p))
+main()
 
-df = pd.DataFrame.from_dict({ 
-    'none': p_list, 
-    'm3': m3err,
-    # 'm = 4': m4err,
-    # 'm = 6': m6err,
-})
+m = 4
+states = generate_binary_strings(m)
+g1 = '10101'
+g2 = '11011'
+g3 = '11111'
+
+main()
+
+m = 6
+states = generate_binary_strings(m)
+g1 = '1001111'
+g2 = '1010111'
+g3 = '1101101'
+
+main()
+
+df = pd.DataFrame.from_dict(error_probs)
 df.to_csv("lab3/results.csv")
 plot_graph(show_fig=False)
