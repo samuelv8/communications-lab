@@ -7,9 +7,10 @@ import math
 
 p_list = [
     0.000002, 0.000005, 0.00001, 0.00002, 0.00005, 0.0001, 0.0002, 0.0005,
-    0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5
+    0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.07, 0.09, 0.1, 0.2, 0.3, 0.4, 0.5
 ]
 
+snr_list = [- math.log1p(2 * x - 1) for x in p_list]
 
 def generate_binary_strings(bit_count):
     binary_strings = []
@@ -119,16 +120,16 @@ def main():
         exec_times[m].append(dt)
     print(f'Mean execution time (m = {m}): ', np.mean(exec_times[m]))
 
-error_probs = {'none': p_list, 3: [], 4: [], 6: []}
-exec_times = {3: [], 4: [], 6: []}
+error_probs = {'rsr': snr_list, 'none': p_list, 4: []}
+exec_times = {4: []}
 
-m = 3
-states = generate_binary_strings(m)
-g1 = '1011'
-g2 = '1101'
-g3 = '1111'
+# m = 3
+# states = generate_binary_strings(m)
+# g1 = '1011'
+# g2 = '1101'
+# g3 = '1111'
 
-main()
+# main()
 
 m = 4
 states = generate_binary_strings(m)
@@ -138,14 +139,14 @@ g3 = '11111'
 
 main()
 
-m = 6
-states = generate_binary_strings(m)
-g1 = '1001111'
-g2 = '1010111'
-g3 = '1101101'
+# m = 6
+# states = generate_binary_strings(m)
+# g1 = '1001111'
+# g2 = '1010111'
+# g3 = '1101101'
 
-main()
+# main()
 
 df = pd.DataFrame.from_dict(error_probs)
-df.to_csv("lab3/results.csv")
+df.to_csv("lab3/results2.csv")
 plot_graph(show_fig=False)
